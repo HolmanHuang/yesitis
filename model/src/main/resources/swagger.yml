@@ -1,1 +1,62 @@
-Yesitis Project with Spring Boot
+swagger: "2.0"
+info:
+  title: "importHttpEndpoint10"
+  description: "import apis"
+  version: "1.0"
+host: "api.account.com"
+paths:
+  '/http/{userId}':
+    get:
+      operationId: "getUser3"
+      description: "get user by userId"
+      security:
+      - apig-auth-iam: []
+      schemes:
+      - https
+      parameters:
+      - name: "test"
+        description: "authorization token"
+        type: "string"
+        in: "header"
+        required: true
+      - name: "userId"
+        description: "user id"
+        type: "string"
+        in: "path"
+        required: true
+      responses:
+        "200":
+          description: "user information"
+      x-apigateway-request-type: "public"
+      x-apigateway-cors: true
+      x-apigateway-match-mode: "NORMAL"
+      x-apigateway-backend:
+        type: "HTTP"
+        parameters:
+        - name: "userId"
+          value: "userId"
+          in: "query"
+          origin: "REQUEST"
+          description: "user id"
+        - name: "X-Invoke-User"
+          value: "apigateway"
+          in: "header"
+          origin: "CONSTANT"
+          description: "invoke user"
+        httpEndpoints:
+          address: "example.com"
+          scheme: "http"
+          method: "GET"
+          path: "/users"
+          timeout: 30000
+securityDefinitions:
+  apig-auth-app:
+    in: header
+    name: Authorization
+    type: apiKey
+    x-apigateway-auth-type: AppSigv1
+  apig-auth-iam:
+    in: header
+    name: unused
+    type: apiKey
+    x-apigateway-auth-type: IAM
